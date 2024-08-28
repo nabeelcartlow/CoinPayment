@@ -1,12 +1,12 @@
 {
-    "name": "hexters/coinpayment",
-    "description": "CoinPayment is a Laravel module for handling transactions from CoinPayment like a create transaction, history transaction, etc.",
+    "name": "nabeelcartlow/coinpayment",
+    "description": "CoinPayment is a Laravel module for handling transactions from CoinPayment like creating transactions, history transactions, etc.",
     "keywords": ["Coinpayment", "Payment Gateway", "Laravel", "Cryptocurrency", "Bitcoin"],
-    "license" : "MIT",
+    "license": "MIT",
     "authors": [
         {
-            "name": "Saifullah Syahidin",
-            "email": "hexters@gmail.com"
+            "name": "Nabeel Afzal",
+            "email": "nabeel.afzal@cartlow.com"
         }
     ],
     "extra": {

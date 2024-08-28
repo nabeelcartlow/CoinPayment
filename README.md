@@ -23,7 +23,7 @@ CoinPayment is a Laravel package for handling transactions from [CoinPayment](ht
 ## Installation
 You can install this package via composer:
 ```bash
-$ composer require hexters/coinpayment
+$ composer require nabeelcartlow/coinpayment
 ```
 
 Publishing vendor
