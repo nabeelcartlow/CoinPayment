@@ -37,5 +37,5 @@ Route::as('coinpayment.')->prefix('coinpayment')
          * IPN handler
          * Please except into csrf proccess /coinpayment/ipn
          */
-        Route::post('/ipn', 'IPNController')->name('ipn');
+        Route::any('/ipn', 'IPNController')->name('ipn');
     });
