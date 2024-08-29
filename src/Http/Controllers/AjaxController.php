@@ -489,5 +489,49 @@ class AjaxController extends CoinPaymentController {
             'message' => $response['error'] ?? 'Request balance failed!'
         ], 400);
     }
+    public function checkCoinPaymentTxnStatus(Request $request)
+    {
+        $orderId = $request->query('orderId');
+
+        if (empty($orderId)) {
+            return $this->waitingForFundsResponse();
+        }
+
+        $transaction = $this->model->where('order_id', $orderId)->first();
+
+        if (!$transaction) {
+            return $this->waitingForFundsResponse();
+        }
+
+        $info = $this->api_call('get_tx_info', ['txid' => $transaction->txn_id]);
+        if (isset($info['result']['status'], $info['result']['status_text'])) {
+            $results    = $info['result'];
+            $remainingf = number_format($results['amountf'] - $results['receivedf'], 8, ".", "");
+            $receivedf  = number_format($results['receivedf'], 8, ".", "");
+            return $this->transactionResponse($results['status'], $results['status_text'], $receivedf, $remainingf, $results['coin'], $results['recv_confirms']);
+        }
+
+        return $this->waitingForFundsResponse();
+    }
+
+    private function transactionResponse(int $status, string $statusText, string $receivedf, string $remainingf, string $coin, string $recv_confirms): array
+    {
+        return [
+            'status' => $status,
+            'status_text' => $statusText,
+            'receivedf' => $receivedf,
+            'remainingf' => $remainingf,
+            'coin' => $coin,
+            'recv_confirms' => $recv_confirms
+        ];
+    }
+
+    private function waitingForFundsResponse(): array
+    {
+        return [
+            'status' => 0,
+            'status_text' => 'Waiting for buyer funds...',
+        ];
+    }
 
 }
