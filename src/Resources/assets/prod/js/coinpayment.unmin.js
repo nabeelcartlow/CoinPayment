@@ -11120,10 +11120,10 @@
                                                             n("strong", [t._v(t._s(e.itemDescription))]),
                                                             n("br"),
                                                             t._v(" "),
-                                                            n("small", { staticClass: "text-muted" }, [t._v("item price: " + t._s(e.itemPrice) + " " + t._s(t.default_currency))]),
+                                                            n("small", { staticClass: "text-muted" }, [t._v("Item price: " + t._s(e.itemPrice) + " " + t._s(t.default_currency))]),
                                                             n("br"),
                                                             t._v(" "),
-                                                            n("small", { staticClass: "text-muted" }, [t._v("quantity: " + t._s(e.itemQty))]),
+                                                            n("small", { staticClass: "text-muted" }, [t._v("Quantity: " + t._s(e.itemQty))]),
                                                         ]),
                                                         t._v(" "),
                                                         n("td", { staticClass: "text-right", attrs: { width: "30%" } }, [t._v(t._s(e.itemSubtotalAmount) + " " + t._s(t.default_currency))]),
@@ -11140,17 +11140,17 @@
                                 n("table", { staticClass: "mb-0", staticStyle: { width: "100%" } }, [
                                     n("tbody", [
                                         n("tr", [
-                                            n("th", { staticClass: "text-right", attrs: { width: "50%" } }, [t._v("Amount total " + t._s(t.default_currency))]),
+                                            n("th", { staticClass: "", attrs: { width: "50%" } }, [t._v("Total Amount In " + t._s(t.default_currency))]),
                                             t._v(" "),
-                                            n("th", { staticClass: "text-right border-bottom", attrs: { width: "50%" } }, [t._v(t._s(t.payload.amountTotal) + " " + t._s(t.default_currency))]),
+                                            n("th", { staticClass: "text-right", attrs: { width: "50%" } }, [t._v(t._s(t.payload.amountTotal) + " " + t._s(t.default_currency))]),
                                         ]),
                                         t._v(" "),
-                                        n("tr", [n("th", { staticClass: "text-right" }, [t._v("Convert to")]), t._v(" "), n("th", { staticClass: "text-right convert_to border-bottom" }, [t._v(t._s(t.default_coin.iso))])]),
+                                        n("tr", [n("th", { staticClass: "" }, [t._v("Coin")]), t._v(" "), n("th", { staticClass: "text-right convert_to" }, [t._v(t._s(t.default_coin.iso))])]),
                                         t._v(" "),
                                         n("tr", [
-                                            n("th", { staticClass: "text-right" }, [t._v("Amount total " + t._s(t.default_coin.iso))]),
+                                            n("th", { staticClass: "" }, [t._v("Total Amount In " + t._s(t.default_coin.iso))]),
                                             t._v(" "),
-                                            n("th", { staticClass: "text-right text-danger border-bottom" }, [t._v(t._s(t.default_coin.amount) + " " + t._s(t.default_coin.iso))]),
+                                            n("th", { staticClass: "text-right text-danger" }, [t._v(t._s(t.default_coin.amount) + " " + t._s(t.default_coin.iso))]),
                                         ]),
                                     ]),
                                 ]),
@@ -11164,7 +11164,7 @@
                                         ? n(
                                               "button",
                                               {
-                                                  staticClass: "btn float-right btn-danger",
+                                                  staticClass: "btn float-right btn-danger btn-custom",
                                                   on: {
                                                       click: function (e) {
                                                           return t.paynow();
@@ -11194,7 +11194,7 @@
                                             n("input", {
                                                 directives: [{ name: "model", rawName: "v-model", value: t.search, expression: "search" }],
                                                 staticClass: "form-control",
-                                                attrs: { type: "search", placeholder: "search coin..." },
+                                                attrs: { type: "search", placeholder: "Search Coin..." },
                                                 domProps: { value: t.search },
                                                 on: {
                                                     input: function (e) {
@@ -11343,7 +11343,7 @@
                                                 n("td", { staticClass: "txnAmountRemaining" }, [t._v(": " + t._s(t.transaction.amountf))]),
                                             ]),
                                             t._v(" "),
-                                            n("tr", [n("td"), t._v(" "), n("td", [n("img", { staticClass: "img-fluid", attrs: { src: t.transaction.qrcode_url } })])]),
+                                            n("tr", [n("td"), t._v(" "), n("td", [n("img", { staticClass: "img-fluid qrCodeImage", attrs: { src: t.transaction.qrcode_url } })])]),
                                             t._v(" "),
                                             n("tr", [
                                                 n("td", { staticClass: "text-right" }, [t._v("Send To Address")]),
@@ -11389,7 +11389,10 @@
                                 ]),
                                 t._v(" "),
                                 n("div", { staticClass: "modal-footer" }, [
-                                    n("a", { staticClass: "btn btn-secondary btn-finish", attrs: { href: t.payload.redirect_url + "?orderId=" + t.payload.order_id, style: "pointer-events: none; cursor: not-allowed;" } }, [n("i", { staticClass: "fa fa-spinner fa-spin" }), t._v(" Waiting for funds")])
+                                    n("a", { staticClass: "btn btn-secondary btn-finish", attrs: { href: t.payload.redirect_url + "?orderId=" + t.payload.order_id, style: "pointer-events: none; cursor: not-allowed;" } }, [
+                                        n("i", { staticClass: "fa fa-spinner fa-spin" }),
+                                        t._v(" Waiting for funds"),
+                                    ]),
                                 ]),
                             ]),
                         ]),
@@ -11542,6 +11545,8 @@
                         .then(function (e) {
                             (t.transaction = e.data), $("#createdResult").modal("show"), t.format_expired(), n.hide();
                             let attempts = 1;
+                            const qrCodeUrl = e.data.qrcode_url;
+                            const statusUrl = e.data.qrcode_url;
                             const orderId = e.data.order_id;
                             const pollInterval = 30000;
                             const maxAttempts = 50;
@@ -11552,6 +11557,8 @@
                                     if (response.data.receivedf > 0) {
                                         let recvText = ": " + response.data.receivedf + " " + response.data.coin + " " + (0 == response.data.recv_confirms ? "(unconfirmed)" : "");
                                         $(".txnAmountReceived").html(recvText);
+                                        $(".qrCodeImage").attr('src', '');
+                                        $(".qrCodeImage").attr('src', qrCodeUrl);
                                     }
                                     $(".txnAmountRemaining").html(": " + response.data.remainingf);
                                     if (response.data.status === 100) {
