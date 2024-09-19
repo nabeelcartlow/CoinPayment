@@ -61,7 +61,10 @@ class AjaxController extends CoinPaymentController
      */
     protected function rates_formater(array $rates, $usd)
     {
-
+        $default_currency = \App\Model\Data\Country::getInstance()->getCurrencySymbolEnglish();
+        if (empty($default_currency)) {
+            $default_currency = config('coinpayment.default_currency');
+        }
         if (!is_array($rates)) {
             throw new Exception('The data must be an array');
         }
@@ -70,8 +73,8 @@ class AjaxController extends CoinPaymentController
             throw new Exception('Rate BTC not found!, please activate BTC support coin for default coin rates.');
         }
 
-        if (empty($rates[config('coinpayment.default_currency')])) {
-            throw new Exception('Is fiat ' . config('coinpayment.default_currency') . ' not supported. please contact CoinPayments support.');
+        if (empty($rates[$default_currency])) {
+            throw new Exception('Is fiat ' . $default_currency . ' not supported. please contact CoinPayments support.');
         }
 
         /**
@@ -83,7 +86,7 @@ class AjaxController extends CoinPaymentController
          * Get default coin and fiat 
          */
         $btcRate = (float) $rates['BTC']['rate_btc'];
-        $usdRate = (float) $rates[config('coinpayment.default_currency')]['rate_btc'];
+        $usdRate = (float) $rates[$default_currency]['rate_btc'];
         $rateAmount = $usdRate * (float) $usd;
 
         $fiat = [];
@@ -207,7 +210,10 @@ class AjaxController extends CoinPaymentController
             /**
              * Get default currency
              */
-            $default_currency = config('coinpayment.default_currency');
+            $default_currency = \App\Model\Data\Country::getInstance()->getCurrencySymbolEnglish();
+            if (empty($default_currency)) {
+                $default_currency = config('coinpayment.default_currency');
+            }
 
             return response()->json([
                 'result' => true,
@@ -268,6 +274,10 @@ class AjaxController extends CoinPaymentController
         try {
             DB::beginTransaction();
 
+            $default_currency = \App\Model\Data\Country::getInstance()->getCurrencySymbolEnglish();
+            if (empty($default_currency)) {
+                $default_currency = config('coinpayment.default_currency');
+            }
 
             if (empty($request->amountTotal)) {
                 throw new Exception('Amount total not found!');
@@ -302,7 +312,7 @@ class AjaxController extends CoinPaymentController
 
             $data = [
                 'amount' => (float) $total,
-                'currency1' => config('coinpayment.default_currency'),
+                'currency1' => $default_currency,
                 'currency2' => $request->coinIso,
                 'buyer_email' => $request->buyer_email
             ];
@@ -322,7 +332,7 @@ class AjaxController extends CoinPaymentController
                 'payload' => $request->payload,
                 'buyer_name' => $request->buyer_name ?? '-',
                 'buyer_email' => $request->buyer_email ?? '-',
-                'currency_code' => config('coinpayment.default_currency'),
+                'currency_code' => $default_currency,
                 'redirect_url' => $request->redirect_url,
                 'cancel_url' => $request->cancel_url,
                 'checkout_url' => $request->checkout_url,
@@ -355,7 +365,7 @@ class AjaxController extends CoinPaymentController
                         'price' => is_object($item) ? $item->itemPrice : $item['itemPrice'],
                         'qty' => is_object($item) ? $item->itemQty : $item['itemQty'],
                         'subtotal' => is_object($item) ? $item->itemSubtotalAmount : $item['itemSubtotalAmount'],
-                        'currency_code' => config('coinpayment.default_currency'),
+                        'currency_code' => $default_currency,
                     ]);
                 }
             }
@@ -397,6 +407,10 @@ class AjaxController extends CoinPaymentController
      */
     public function get_balance()
     {
+        $default_currency = \App\Model\Data\Country::getInstance()->getCurrencySymbolEnglish();
+        if (empty($default_currency)) {
+            $default_currency = config('coinpayment.default_currency');
+        }
         $response = CoinPayment::getBalances();
         if ($response['error'] == 'ok') {
             $blances = $response['result'];
@@ -413,7 +427,7 @@ class AjaxController extends CoinPaymentController
                         'amount' => $data['balancef'],
                         'add_tx_fee' => 0,
                         'currency' => $coin,
-                        'currency2' => config('coinpayment.default_currency'),
+                        'currency2' => $default_currency,
                         'address' => '',
                         'pbntag' => '',
                         'note' => ''
@@ -537,5 +551,8 @@ class AjaxController extends CoinPaymentController
             'status' => 0,
             'status_text' => 'Waiting for buyer funds...',
         ];
+    }
+    public function refund($orderId) {
+        
     }
 }
