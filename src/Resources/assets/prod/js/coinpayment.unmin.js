@@ -11532,7 +11532,7 @@
                 },
                 paynow: function () {
                     var t = this;
-                    i()("Are you sure you want to proceed with the "+this.default_coin.name+"? Once the transaction is initiated, you won't be able to change the coin.", { buttons: !0 }).then(function (e) {
+                    i()("Are you sure you want to proceed with the '"+this.default_coin.name+"'? Once the transaction is initiated, you won't be able to change the coin.", { buttons: !0 }).then(function (e) {
                         e && t.makeTransaction();
                     });
                 },
@@ -11579,7 +11579,7 @@
                             pollForStatus();
                         })
                         .catch(function (t) {
-                            t.response.status >= 400 && i()(t.response.data.message, { icon: "warning" }), n.hide();
+                            t.response.status >= 400 && i()(".", { content:t.response.data.message, icon: "warning" }), n.hide();if (t.response.data.message && t.response.data.message.trim() !== "") {$('.swal-text').html(t.response.data.message);}
                         });
                 },
                 set_billing: function (t) {

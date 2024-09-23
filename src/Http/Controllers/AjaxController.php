@@ -298,7 +298,9 @@ class AjaxController extends CoinPaymentController
             $check_transaction = $this->model->where('order_id', $request->order_id)->whereNotNull('txn_id')->first();
 
             if ($check_transaction) {
-                throw new Exception('Order ID: ' . $check_transaction->order_id . ' already exists, and the current status is ' . $check_transaction->status_text);
+                throw new Exception("Transaction for this order already exists, and the current transaction status is " . $check_transaction->status_text);
+                // throw new Exception("Order already exists, and the current transaction status is " . $check_transaction->status_text . " <br><br><a href='{$check_transaction->status_url}' target='_blank'>Click here</a> to complete transaction or go back to merchant site (i.e. " . config("app.name"). ") and create a new order to proceed.");
+                // throw new Exception('Order ID: ' . $check_transaction->order_id . ' already exists, and the current status is ' . $check_transaction->status_text);
             }
 
             $orderParent = explode('_', $request->order_id);
