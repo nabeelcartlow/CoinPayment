@@ -11532,7 +11532,7 @@
                 },
                 paynow: function () {
                     var t = this;
-                    i()("Are you sure ?", { buttons: !0 }).then(function (e) {
+                    i()("Are you sure you want to proceed with the "+this.default_coin.name+"? Once the transaction is initiated, you won't be able to change the coin.", { buttons: !0 }).then(function (e) {
                         e && t.makeTransaction();
                     });
                 },
