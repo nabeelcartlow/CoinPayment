@@ -110,6 +110,9 @@ class AjaxController extends CoinPaymentController
 
 
                 $icon = $logos[$value['name']] ?? 'https://www.coinpayments.net/images/coins/' . $img . '.png';
+                if (isset($value['image']) && $value['image'] != "") {
+                    $icon = $value['image'];
+                }
 
                 $coins[] = [
                     'name' => $value['name'],
@@ -141,6 +144,9 @@ class AjaxController extends CoinPaymentController
                 }
 
                 $icon = $logos[$value['name']] ?? 'https://www.coinpayments.net/images/coins/' . $img . '.png';
+                if (isset($value['image']) && $value['image'] != "") {
+                    $icon = $value['image'];
+                }
 
                 $coins_accept[] = [
                     'name' => $value['name'],
